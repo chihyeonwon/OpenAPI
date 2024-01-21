@@ -58,7 +58,87 @@
 - 3.1.0
 - MySQL
 - Junit4
+## Controller에서 통신하기
+```JAVA
+@RestController
+@RequestMapping("/api")
+public class ForecastController {
+    @Value("${openApi.serviceKey}")
+    private String serviceKey;
 
+    @Value("${openApi.callBackUrl}")
+    private String callBackUrl;
+
+    @Value("${openApi.dataType}")
+    private String dataType;
+
+    @GetMapping("/forecast")
+    public ResponseEntity<String> callForecastApi(
+            @RequestParam(value="base_time") String baseTime,
+            @RequestParam(value="base_date") String baseDate,
+            @RequestParam(value="beach_num") String beachNum
+    ){
+        HttpURLConnection urlConnection = null;
+        InputStream stream = null;
+        String result = null;
+
+        String urlStr = callBackUrl +
+                "serviceKey=" + serviceKey +
+                "&dataType=" + dataType +
+                "&base_date=" + baseDate +
+                "&base_time=" + baseTime +
+                "&beach_num=" + beachNum;
+
+        try {
+            URL url = new URL(urlStr);
+
+            urlConnection = (HttpURLConnection) url.openConnection();
+            stream = getNetworkConnection(urlConnection);
+            result = readStreamToString(stream);
+
+            if (stream != null) stream.close();
+        } catch(IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (urlConnection != null) {
+                urlConnection.disconnect();
+            }
+        }
+
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    }
+
+    /* URLConnection 을 전달받아 연결정보 설정 후 연결, 연결 후 수신한 InputStream 반환 */
+    private InputStream getNetworkConnection(HttpURLConnection urlConnection) throws IOException {
+        urlConnection.setConnectTimeout(3000);
+        urlConnection.setReadTimeout(3000);
+        urlConnection.setRequestMethod("GET");
+        urlConnection.setDoInput(true);
+
+        if(urlConnection.getResponseCode() != HttpURLConnection.HTTP_OK) {
+            throw new IOException("HTTP error code : " + urlConnection.getResponseCode());
+        }
+
+        return urlConnection.getInputStream();
+    }
+
+    /* InputStream을 전달받아 문자열로 변환 후 반환 */
+    private String readStreamToString(InputStream stream) throws IOException{
+        StringBuilder result = new StringBuilder();
+
+        BufferedReader br = new BufferedReader(new InputStreamReader(stream, "UTF-8"));
+
+        String readLine;
+        while((readLine = br.readLine()) != null) {
+            result.append(readLine + "\n\r");
+        }
+
+        br.close();
+
+        return result.toString();
+    }
+}
+```
 
 
 
