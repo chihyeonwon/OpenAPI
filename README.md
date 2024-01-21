@@ -139,6 +139,7 @@ public class ForecastController {
     }
 }
 ```
+![image](https://github.com/mr-won/OpenAPI/assets/58906858/71419788-7bb7-4e11-a384-1195ade1bd84)
 
 
 
