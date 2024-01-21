@@ -139,8 +139,11 @@ public class ForecastController {
     }
 }
 ```
-![image](https://github.com/mr-won/OpenAPI/assets/58906858/71419788-7bb7-4e11-a384-1195ade1bd84)
-
+## JSON Viewer
+![image](https://github.com/mr-won/OpenAPI/assets/58906858/ab91f696-fa74-4e1d-b55f-5b1f9d554903)
+```
+크롬 확장프로그램 중 JSON Viewer를 사용하여 JSON Parsing한 데이터를 깔끔하게 볼 수 있다.
+```
 
 
 
