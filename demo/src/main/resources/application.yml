@@ -1,0 +1,24 @@
+spring:
+  profiles:
+    active:
+      - local
+    group:
+      local:
+        - db-local
+    include:
+      - db
+      - api
+
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/shop?serverTimezone=UTC
+    username: root
+    password: root
+
+server:
+    port: 8000
+
+openApi:
+  serviceKey: "c1ISMi%2BObOku4US5IhRtwjn5ZYQ3INLTkaqAYaOhkdArfvUx2HzAN%2Bj4w86CivGR7tUT9UJe1C9q5wEZXZW2bw%3D%3D"
+  callBackUrl: "http://apis.data.go.kr/1360000/BeachInfoservice"
+  dataType: "JSON/XML"
